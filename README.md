@@ -12,4 +12,4 @@ https://www.rstudio.com/products/rstudio/download/<br>
 Registrazione lezione:<br>
 https://unito.webex.com/recordingservice/sites/unito/recording/c4bd817f97b7103abffd005056821ff4/playback
 ## Lezione 2: Manipolazione delle stringhe e pacchetto string
-## Lezione 3: 
+## Lezione 3: Ciclo For e applicazione
