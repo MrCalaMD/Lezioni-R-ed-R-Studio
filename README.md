@@ -12,7 +12,7 @@ https://www.rstudio.com/products/rstudio/download/<br>
 
 ## Lezione 1: Introduzione ad R-studio e uso funzionale di R
 ### Slide
-[Slide Lezione](https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione1_Intro.html)
+[Slide Lezione](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione1_Intro.html)
 ### Registrazione lezione:<br>
 https://unito.webex.com/recordingservice/sites/unito/recording/c4bd817f97b7103abffd005056821ff4/playback <br>
 ### Argomenti
