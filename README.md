@@ -45,6 +45,7 @@ Partendo dalle funzioni più semplici si approfondisce il tema delle ***Regular 
 ## Lezione 3: Gestione DataBase e variabili categoriche
 ### Slide
 ### Registrazione lezione:<br>
+### Argomenti
 In questa lezione si affronterà il tema dell'uso delle funzioni base di R per ricavare da un database numerico grezzo, ottenuto dalla compilazione di un questionario, un database dal quale poter trarre informazioni utili attraverso la rappresentazione grafica di variabili fattoriali.<br>
 
 ## Lezione 4: Ciclo For con applicazione per Cross-Validation
