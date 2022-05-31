@@ -12,7 +12,7 @@ https://www.rstudio.com/products/rstudio/download/<br>
 
 ## Lezione 1: Introduzione ad R-studio e uso funzionale di R
 ### Slide
-[Slide Lezione](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione1_Intro.html)
+[Slide Lezione1](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione1_Intro.html)
 ### Registrazione lezione:<br>
 https://unito.webex.com/recordingservice/sites/unito/recording/c4bd817f97b7103abffd005056821ff4/playback <br>
 ### Argomenti
@@ -31,6 +31,8 @@ Vengono inolte introdotti alcuni elementi fondamentali di programmazione fra cui
 
 
 ## Lezione 2: Manipolazione delle stringhe e pacchetto string
+### Slide
+[Slide Lezione2](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione2_Stringhe.html)
 ### Registrazione lezione:<br>
 https://unito.webex.com/webappng/sites/unito/recording/1ba042e9be31103abbe2005056810d6d/playback
 ### Argomenti
