@@ -1,0 +1,626 @@
+---
+title: "Intro gentile R ed R-studio"
+author: "Francesco Calabrese"
+date: "21/3/2022"
+output: slidy_presentation
+css: style.css
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  fig.width = 12,
+  fig.height = 7, size = "tiny", collapse=T, comment="#"
+)
+
+```
+
+---
+
+<h1>Le <span>Basi</span></h1>
+<hr>
+
+-   Variabili
+-   Gli operatori più utili
+-   Le funzioni
+-   Vettori
+-   Matrici
+-   DataFrame
+-   Liste (la cosa più complessa di R)
+
+---
+
+<h1>Le<span> Variabili</span></h1>
+<hr>
+
+Qualunque elemento che occupa memoria del computer è una variabile.
+
+<h3>Tipi di Variabile</h3>
+
+-   Numerica (6, -3, 2.5, pi)
+-   Stringa ("ciao", "F", "4.4")
+-   Categorica (F, M, diploma, laurea, master)
+-   Booleana (TRUE, FALSE)
+-   Nulla (NA)
+
+---
+
+<h1>Gli <span>Operatori</span></h1>
+<hr>
+R riconosce diversi operatori aritmetici, ma anche logici:<br>
+
+```{r eval=T, echo=T}
+# Il segno <- serve per ad assegnare un valore
+numeri <- c(1, 2, 3)
+```
+<div style="display:inline;" >
+<div style="float: left; width: 48%;">
+```{r eval=T, echo=T}
+# Somma : +
+10 + 3
+# Sottrazione : -
+3 - 6
+# Moltiplicazione : *
+3 * 3
+# Numero Assoluto : abs
+abs(-12)
+#Parentesi : SOLO ()
+(3+5)*6
+#Seleziona : []
+numeri[1]
+```
+
+</div>
+<div style="float: right; width: 48%;">
+
+```{r eval=T, echo=T}
+# Divisione : FRONT-SLASH
+10/2
+# Potenza : **
+3**3
+# Resto : %%
+34 %% 3
+# E' contenuto : %in%
+2 %in% c(3, 4, 5, 6, 2)
+#Maggiore/Minore : >/<   
+3>7
+#Uguale : ==
+3==4
+```
+
+</div>
+</div>
+
+---
+
+<h1>Gli Operatori<span>And Or</span></h1>
+In R esiste la possibilità di concatenare infinite condizioni logiche attraverso gli operatori **AND** e **OR**:<br>
+```{r, echo=T, eval=T, comment="#"}
+#AND si scrive con il segno &
+4 == 6 & 4 == 4
+
+#OR si scrive con il segno |
+4 == 4 | 4 == 6
+
+#AND prevale sull'OR se concateniamo delle condizioni
+4 != 6 & 6 == 6 | 5 == 4
+```
+Non esiste il NOT, ma in realtà questo non è necessario perchè è possibile sostituirlo con gli altri operatori logici.<br> 
+
+---
+
+<h1>Gli Operatori<span>If Else </span></h1>
+<hr>
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+R supporta la struttura logica dell' *if-else*:<br>
+La struttura è sempre fatta da:<br>
+- if<br>
+- **(**condizione**)**<br>
+- **{**cosadeve fare il programma**}**<br>
+- *facoltativo* else<br>
+- **{**cosadeve fare il programma**}**<br>
+</div>
+<div style="float: right; width: 48%;">
+
+```{r, echo=T, eval=T, comment="#"}
+numero = 9
+if (numero %% 2 == 0){
+  print("Numero pari")
+} else {
+    print("Numero dispari")
+}
+
+#E' possibile concatenare varie condizioni:
+
+if (numero %% 2 == 0){
+  print("Numero pari")
+} else {
+    if (numero %% 3 == 0){
+      print("Numero dispari divisibile per 3")
+    }
+   else
+      {print("Numero dispari")}
+  }
+```
+
+</div>
+</div>
+
+--- 
+
+<h1>L'operatore <span>While</span></h1>
+<hr>
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+La struttura è sempre fatta da: <br>
+- while<br>
+- **(**condizione**)**<br>
+- **{**cosadeve fare il programma**}**<br>
+</div>
+<div style="float: right; width: 48%;">
+
+```{r, echo=T, eval=T, comment="#"}
+#Assegno a numero un valore da 0 a 10:
+numero = 8
+#Creo un contatore
+contatore = 0
+#Creo un ciclo while che permette di 
+#portare il contatore al numero corretto
+while(contatore != numero){
+  
+  if (numero == 10){contatore = 10}
+  
+  else{
+    
+    if (numero < 10){contatore = contatore + 1}
+    
+    else{contatore = 0}
+    
+  }
+  
+}
+print(contatore)
+```
+
+</div>
+</div>
+
+---
+
+<h2>Le<span> Funzioni</span></h2>
+<hr>
+Le funzioni sono degli algoritmi che accettano uno o più argomenti e restituiscono un risultato.<br>
+La maggior parte delle funzioni che si impiegano su R sono già state create, nulla vieta però di costruirne altre.<br>
+In R è necessario dare un nome alla propria funzione tranne che in particolari situazioni.<br>
+<h3>Esempio:</h3>
+
+```{r, echo=T, eval=T, comment="#"}
+#sum() è una funzione intrinseca ad R che prende un 
+#numero n di argomenti numerici
+
+sum(4.5, 4, 3.65, 32, -10)
+
+#Creo una funzione con il comando function() che accetta 
+#un nome e che restituisce una stringa dove la 
+#persona viene salutata
+
+saluta <- function(nome){
+  
+  print(paste('Ciao', nome))
+}
+
+#Importante: l'argomento deve essere tra virgolette;
+#in altre parole deve essere una stringa!
+
+saluta("Antonio")
+
+```
+
+---
+
+<h1>Argomenti: <span>Posizione e Nome</span></h1>
+
+Una funzione può prendere diversi argomenti, sono molto importanti il **nome** dell'argomento e la **posizione**!
+
+```{r, echo=T, eval=T, comment="#"}
+
+saluta <- function(nome, cognome, eta){
+  
+  print(paste('Ciao', nome, cognome, 'la tua età è', eta, 'anni'))
+}
+
+#Se do il nome degli argomenti questo prevale sulla posizione
+
+saluta("Marco", "Rossi", 32)
+
+saluta(cognome = 'Rossi', eta = 32, nome = 'Marco')
+
+```
+
+---
+
+<h1>Funzioni e <span>Environment</span></h1>
+
+Tutto ciò che viene creato all'interno di una funzione non va nell'ambiente di lavoro a meno che non lo si espliciti nella funzione stessa.<br>
+```{r, echo=T, eval=T, warning=TRUE, error=TRUE}
+
+moltiplicazione <- function(a, b){
+  risultato = a*b
+}
+moltiplicazione(2, 3)
+print(risultato) #Non restituisce nulla perchè è interno alla funzione
+
+moltiplicazione <- function(a, b){
+  risultato = a*b
+  return(risultato)
+}
+moltiplicazione(2, 3)
+
+```
+Perchè la funzione restituisca una variabile nell' ambiente di lavoro è necessario usare la funzione <mark>return()</mark>.
+
+---
+
+<h1>I<span> Vettori</span></h1>
+<hr>
+
+Insieme  **ordinato** di variabili **tutte** dello stesso tipo.<br>
+
+Non possono esistere vettori che hanno variabili di tipo diverso al loro
+interno. <br>
+
+Fa eccezione la variabile **Nulla o NA** che può essere contenuta in
+qualsiasi vettore.<br>
+
+Esistono quindi 4 tipi di vettori:<br>
+
+- numerico 
+- stringa
+- booleano
+- categorico
+
+---
+
+<h1>Creare un <span>Vettore</span></h1>
+<hr>
+
+Il comando per creare un vettore è **c()**, ogni elemento deve essere separato dalla virgola.<br>Per assegnare un nome ad ogni elemento è necessario usare il segno **=**, scrivendo il nome a sinistra ed il valore a destra.
+
+```{r, echo=T, eval=T, comment="#"}
+vettore_numerico <- c(1, 2, 3)
+vettore_stringa <- c("ciao", "mi", "chiamo", "Francesco")
+vettore_booleano <- c(TRUE, FALSE, TRUE, FALSE,TRUE, FALSE)
+vettore_categorico <- as.factor(c("M", "F", "M", "M", "F"))
+
+#Creo un vettore dove ogni variabile ha un nome
+studenti <-c("Studente1"="Carlo", "Studente2"="Paolo", 
+             "Studente3"="Anna", "Studente4"="Ada", 
+             "Studente5"="Pippo")
+
+#Richiamo i nomi con la funzione names()
+names(studenti)
+studenti
+vettore_categorico
+vettore_numerico
+```
+In R è meglio usare il segno **<-** al posto del segno **=** per assegnare un valore ad una variabile in quanto l'uguale va riservato ad alcuni comandi particaolari.
+
+---
+
+<h1>Le <span>Matrici</span></h1>
+<hr>
+
+Le matrici sono delle griglie che si sviluppano su *n* dimensioni.<br>
+
+Classicamente le matrici hanno 2 dimensioni, ma potenzialmente possono
+essere sviluppate su un numero di dimensioni più piccolo o più
+grande. 
+
+<h2>Per <span>Semplificare</span></h2>
+- Il vettore è una matrice unidimensionale<br>
+- La scacchiera è una matrice bidimensionale (classica)<br>
+- Lo spazio si può rappresentare su una matrice tridimensionale<br>
+- Lo spazio-tempo si può rappresentare su una matrice quadridimensionale...
+
+---
+
+<h1>Creare una <span>matrice</span></h1>
+<hr>
+
+In **R** le matrici sono bidimensionali, e si possono creare con vari
+sistemi.<br>Il comando principale è **matrix()**, ma se generiamo la
+matrice da più vettori possiamo usare i comandi **cbind() o
+rowbind()**.<br>
+Il comando **matrix()** dispone gli elementi di un *set di valori* a formare una griglia di 2 dimensioni: **Righe e Colonne**
+
+
+```{r, echo=T, eval=T}
+#Userò il vettore booleano creato in precedenza:
+
+matrice <- matrix(vettore_booleano, 2, 3)
+
+#Ho creato così una matrice di 2 righe e 3 colonne
+
+matrice
+
+matrice <- matrix(vettore_booleano, 2, 3, byrow = T)
+
+matrice
+```
+
+---
+
+<h1>Alternative per creare <span>matrici</span></h1>
+<hr>
+
+Matrici e vettori sono fra di loro correlate a tal punto più vettori possono essere uniti a formare matrici.
+
+```{r eval=T, echo=T}
+a <- c(1, 2, 3)
+b <- c(4, 5, 6)
+c <- c(7, 8, 9)
+matrice <- cbind(a, b, c)
+matrice 
+matrice2 <- rbind(a, b, c) 
+matrice2 
+typeof(matrice)
+
+```
+
+---
+
+<h1>Le <span>matrici</span> sono simili ai <span>vettori</span></h1>
+<hr>
+
+Non è possibile creare una matrice che contiene variabili di tipo diverso.<br>
+In ciò le matrici si comportano esattamente come i vettori.<br>
+```{r eval=T, echo=T}
+a <- cbind(matrice2, c(TRUE, FALSE, FALSE))
+b <- cbind(matrice2, c("T", "F", "F"))
+a
+b
+typeof(a)
+typeof(b)
+```
+
+---
+
+<h1>Le <span>Liste</span></h1>
+Le Liste in R sono oggetti che possono contenere di tutto al loro interno.<br>
+Di conseguenza all'interno delle liste possono essere presenti variabili singole, vettori, liste, matrici, dataframe, ma anche funzioni.<br>
+Ad esempio tutti i file che permettono di creare mappe su R sono delle liste perchè all'interno di queste dobbiamo trovare il nome della regione geografica (comune, provincia, regione, stato), altre informazioni aggiuntive (popolazione, tipo di zona geografica) ed infine le coordinate che sono organizzate in modo tale che possano essere proiettate su di un piano cartesiano.
+```{r eval=T, echo=T}
+#Creo una lista con 3 vettori e 2 matrici
+lista <- list(matrice, matrice2, saluta)
+```
+<div style="display:inline;" >
+<div style="float: left; width: 48%;">
+
+```{r eval=T, echo=T}
+#Per richiamare l'elemento di una lista
+#si può usare un sola [], il comando restituisce 
+#una lista
+lista[3]
+```
+
+</div>
+<div style="float: right; width: 48%;">
+
+```{r eval=T, echo=T}
+#Per accedere all'elemento di una lista devo usare 2
+#parentesi quadre [[]]
+
+lista[[3]]("Marco", "Rossi", 32)
+
+```
+
+</div>
+</div>
+
+
+---
+
+<h1>Le <span>coordinate</span> e i <span>metadati</span></h1>
+<hr>
+
+E' possibile attribuire ad ogni oggetto di R vari metadati che permettono di lavorare meglio con l'oggetto.\n
+Sappiamo già che ogni oggetto ha un nome, questo non è nient'altro che un metadato.\n
+<br>
+Nell'analisi dati i metadati più importanti sono rappresentati dalla posizione degli elementi contenuti nei nostri oggetti.\n
+Infatti tutti gli elementi di R sono contenitori o cassetti che contengono dati.\n
+Ogni dato ha una sua specifica posizione e questa può essere identificata.\n
+
+```{r eval=T, echo=T}
+a <- c(9, 8, 7, 6, 5, 4, 3, 2, 1)
+#Uso la funzione [] per selezionare uno o più specifici elementi del vettore
+a[3]
+a[c(1, 4, 8)]
+
+#E' possibile anche selezionare gli elementi in base ad una loro caratteristica
+#Per esempio per sapere se un numero è pari posso
+#usare il comando per ottenere il resto della divisione (%%)
+
+a %% 2 == 0
+#Ora invece di una posizione cercherò i numeri con una 
+#formula che restituisce vero e falso
+
+a[a %% 2 == 0]
+
+```
+---
+
+<h1>Coordinate delle <span>matrici</span> e dei <span>Dataframe</span></h1>
+<hr>
+
+Lo stesso principio si può applicare alle matrici che però sono bidimensionali.<br>
+La regola aurea per identificare un dato in una specifica posizione è: **riga e colonna**. <br>
+Quindi nella nostra funzione di selezione indicheremo prima le righe e poi le colonne.<br>
+
+```{r eval=T, echo=T}
+matrice <- matrix(c(1:100), 10, 10)
+matrice
+
+#Se voglio che la funzione di selezione mi restituisca 99 scriverò:
+
+matrice[9, 10]
+
+```
+
+---
+
+<h1>Differenze fra <span>matrici</span> e <span>Dataframe</span></h1>
+<hr>
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+<h3><span>Matrici</span></h3>
+- Contine solo un tipo di variabile
+- Solitamente è usata per calcoli matematici
+- Scarsa utilità nell'analisi dati
+- Utile per alcune attività (Machine Learning)
+<br>
+```{r eval=T, echo=F}
+matrice2
+```
+</div>
+<div style="float: right; width: 48%;">
+<h3><span>Dataframe</span></h3>
+- Può contenere tutti i tipi di variabili
+- Utile per raccogliere informazioni 
+- Strumento essenziale nell' analisi dati
+- Meno versatile per l'uso di alcuni pacchetti in R
+<br>
+<img img src="Immagini/database.gif"
+alt="Database" width="100%" height="70%"></img>
+
+</div>
+</div>
+---
+
+<h1>Importare un <span>Dataframe</span></h1>
+<hr>
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+
+Se ci sono problemi a capire in che directory si sta lavorando si può lanciare la funzione <mark>getwd()</mark>.<br>
+R può leggere qualunque formato, ma per fortuna nella maggior parte dei casi è possibile ottenere i dati in formato *.csv* o *.txt*.<br>
+La libreria <mark>Tidyverse</mark> contiene delle funzioni che consentono di leggere i file Excel, ma è preferibile salvarsi i file in Excel direttamente in formato *.csv*.<br>
+R ha delle funzioni intrinseche per importare i file *.txt o csv*.
+<br>
+
+</div>
+<div style="float: right; width: 48%;">
+
+```{r eval=T, echo=T}
+#Scelgo il percorso del file ed il file,
+#inoltre fornisco l'argomento separatore che mi
+#identifica il modo in cui le variabili sono separate.
+
+data <- read.csv(file = 'Cartella dove salvare DF\\fev.csv',
+                 sep = '')
+
+head(data)
+```
+<br>
+</div>
+</div>
+Importante:<br>
+Su Windows il percorso file si indica col back-slash (\\), ma purtoppo il back-slash è un carattere speciale in R! <br>
+In particolare il back-slash permette di skippare i caratteri speciali quindi, per riassumere per scrivere un back-slash in R bisogna scriverne due.<br>
+
+---
+
+<h1>Studiare un <span>Dataframe</span></h1>
+<hr>
+Quando si estraggono i dati dalle piattaforme online o dai datawarehouse delle Aziende Sanitarie di solito contengono tantissime informazioni ridondanti (es. ASL e codice ASL). Nella maggior parte dei casi sono database dove non viene definita la natura delle variabili che sono quindi in formato stringa.<br>
+<br>
+Il comando <mark>view()</mark> o <mark>View()</mark> permette di visualizzare il database, mentre il comando <mark>summary()</mark> permette di riassumere le variabili del DF.<br>
+Il comando <mark>str()</mark> permette di studiare la struttura del dataframe.
+
+```{r eval=T, echo=T}
+summary(data)
+```
+
+---
+
+<h1>Variabili <span>fattoriali</span></h1>
+In questo caso il database é molto semplice ed è costituito da ```r ncol(data)``` colonne e ```r nrow(data)``` righe. <br>
+Il genere e il fumo sono però variabili categoriche e quindi dobbiamo cambiarle con la funzione <mark>as.factor()</mark>. <br>
+Il segno del dollaro ($) in R viene usato per fare riferimento ad una colonna specifica del datafasme.
+
+```{r eval=T, echo=T}
+data$sex <- factor(data$sex)
+
+data$smoke <- factor(data$smoke,
+                     levels = c('current smoker', 'non-current smoker'),
+                     labels = c('Yes', 'No'))
+
+str(data)
+```
+
+---
+
+<h1>Analisi <span>grafica</span></h1>
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+
+<h3>Analisi grafica variabile quantitativa</h3>
+<hr>
+```{r eval=T, echo=T}
+hist(data$age ,c(seq(0, 20, 2)),
+     main="Distrubuzione Età",xlab="Età")
+```
+
+</div>
+
+<div style="float: right; width: 48%;">
+
+<h3>Analisi variabile categorica</h3>
+<hr>
+```{r eval=T, echo=T}
+plot(data$smoke, data$fev, xlab="Smoke",
+     ylab="Fev",main = "Correlazione fumo e Fev")
+```
+
+</div>
+</div>
+
+---
+
+<h1>Introduzione al <span>Tidyverse</span></h1>
+<hr>
+
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+Tidyverse e un modulo di R che contiene sotto-moduli ognuno dei quali è utile nell'analisi dati:<br>
+- readr (utile per leggere file creati con excel o altri programmi)<br>
+- string (gestione delle stringhe)<br>
+- dplyr (modifica dei Dataframe e 'pipe')<br>
+- tidyr (gestione e oraganizzazione Dataframe)<br>
+- ggplot (grafici)<br>
+- purr (gestione delle funzioni iterative)<br>
+
+```{r eval=T, echo=T, message=F}
+
+#install.packages("tidyverse")
+
+library(tidyverse)
+```
+</div>
+
+<div style="float: right; width: 48%;">
+<a href="https://www.tidyverse.org/packages/">
+   <img src="Immagini/tidyverse.jpg" alt="Tidyverse" width="100%" height = "100%">
+</a>
+
+</div>
+</div>
