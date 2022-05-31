@@ -15,7 +15,7 @@ In questa lezione vengono introdotti i concetti base nell'uso di R fra cui:<br>
 - Vettori
 - Matrici
 - Liste
-- DataFrame
+- DataFrame <br>
 Inoltre vengono approfonditi i principali comandi e la sintassi di R <br>
 Vengono inolte introdotti alcuni elementi fondamentali di programmazione fra cui:<br>
 -Funzioni (sintassi ed argomenti)
