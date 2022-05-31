@@ -18,10 +18,10 @@ In questa lezione vengono introdotti i concetti base nell'uso di R fra cui:<br>
 - DataFrame <br>
 Inoltre vengono approfonditi i principali comandi e la sintassi di R <br>
 Vengono inolte introdotti alcuni elementi fondamentali di programmazione fra cui:<br>
--Funzioni (sintassi ed argomenti)
--Ciclo for
--While loop
--If/Else
+- Funzioni (sintassi ed argomenti)
+- Ciclo for
+- While loop
+- If/Else
 ## Lezione 2: Manipolazione delle stringhe e pacchetto string
 Registrazione lezione:<br>
 https://unito.webex.com/webappng/sites/unito/recording/1ba042e9be31103abbe2005056810d6d/playback
