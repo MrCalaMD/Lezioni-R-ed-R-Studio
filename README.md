@@ -37,12 +37,16 @@ Vengono inolte introdotti alcuni elementi fondamentali di programmazione fra cui
 https://unito.webex.com/webappng/sites/unito/recording/1ba042e9be31103abbe2005056810d6d/playback
 ### Argomenti
 In questa lezione si affronta la gestione delle variabili stringa (character) attraverso l'utilizzo delle funzioni base di R e del pachetto ***string***. <br>
-Partendo dalle finzioni più semplici si apprifondisce il tema delle ***Regular Expession***
+Partendo dalle funzioni più semplici si approfondisce il tema delle ***Regular Expession***
 ### CheatSheet Regular Expression:
 ![Regular Expressions](https://denhamcoder.files.wordpress.com/2019/11/110719_1134_netregexche1.png)
 
 
 ## Lezione 3: Gestione DataBase e variabili categoriche
+### Slide
+### Registrazione lezione:<br>
+In questa lezione si affronterà il tema dell'uso delle funzioni base di R per ricavare da un database numerico grezzo, ottenuto dalla compilazione di un questionario, un database dal quale poter trarre informazioni utili attraverso la rappresentazione grafica di variabili fattoriali.<br>
+
 ## Lezione 4: Ciclo For con applicazione per Cross-Validation
 ### Slide
 [Slide Lezione4](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione3_Ciclo-For.html)
