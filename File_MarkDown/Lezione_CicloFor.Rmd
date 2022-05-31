@@ -1,0 +1,357 @@
+---
+title: "Lezione Ciclo For"
+author: "Francesco Calabrese"
+date: "21/3/2022"
+output: slidy_presentation
+css: style.css
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  fig.width = 12,
+  fig.height = 7, size = "tiny", collapse=T, comment="#"
+)
+library(tidyverse)
+rm(list=ls())
+```
+
+---
+
+<h1>Intro al <span>Ciclo For</span></h1>
+<hr>
+Il <mark>ciclo for</mark> è un'operazione che consente di ripetere una o più azioni un numero i di volte che  va da 1 a n dove n è scelto dall'utente/programmatore. <br>
+Potenzialmente qualunque azione che va ripetuta n volte si può inserire in un <mark>ciclo for</mark>.<br>
+In altri linguaggi di programmazione i <mark>for loop</mark> sono essenziali, ma il R non sono ottimizzati e se ne sconsiglia l'uso in favore delle <mark>apply functions</mark>.
+
+<h3>Esempio <span>ciclo for</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Metodo inventato da me
+vettore_stringa <- c("ciao", "mi", "chiamo", "Francesco")
+
+vocali <- c('a', 'e', 'i', 'o', 'u')
+vocali <- c(str_to_upper(vocali), vocali)
+for (i in 1:length(vocali)){
+  vettore_stringa <- str_replace(vettore_stringa, vocali[i], '*')
+}
+
+vettore_stringa
+```
+
+---
+
+<h1>Ogni for loop vuole un <span>contenitore</span></h1>
+<hr>
+Quando si genera un oggetto da un <mark>for loop</mark> molto spesso questo va conservato. Lo svantaggio del ciclo for è che se non sappiamo quanti elementi si generano possiamo avere delle difficolta nell'immagazzinare ciò che il computer elabora!<br>
+Immaginiamo di voler creare un frase per ogni studente che partecipa ad una competizione.<br>
+Dopo aver raccolto i nomi in un vettore dovrò creare una lista dove immagazzinare le frasi che genererò con il <mark>for loop</mark>.
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+nomi <- c('Marco', 'Anna', 'Giulio', 
+          'Francesco', 'Maria', 'Concetta', 
+          'Anna Maria', 'Mirko', 'Marco')
+
+nomi
+
+out <- vector("list", length = length(nomi))
+
+for (i in 1:length(nomi)){
+  out[i]<- paste("Lo studente numero", i, "si chiama", nomi[i])
+}
+unlist(out)
+```
+---
+
+<h1>Simulazione con <span>for loop</span></h1>
+<hr>
+Immaginiamo di avere 500 valori di una variabile indipendente con distribuzione normale , *media* di valore 10 e *deviazione standard (sd)* di valore pari a 15.<br>
+Immaginiamo ora che esista una proporzionalità quadratica tra la variabile indipendente e quella dipendente:<br>
+
+$Y=\alpha X^2 + \beta X + c$<br>
+
+R ci da la possibilità di generare sia numeri casuali, per esempio con la funzione <mark>runif()</mark>, sia la possibilità di generare vari tipi di distribuzioni.<br>
+Per esempio spesso in natura si osservano distribuzioni che sono simili a quella normale.<br>
+Per generare una distribuzione normale si usa il comando <mark>rnorm()</mark>.
+
+---
+
+<h1>Simulazione con <span>for loop</span></h1>
+<hr>
+Per simulare si possono usare le funzioni base di R.<br>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+# Definisco la variabile indipendente
+
+set.seed(12345)#I risultati verranno sempre uguali
+n = 500 #Numerosità
+x <- abs(rnorm(n = n, mean = 10, sd = 15)) #Tipo di distribuzione
+```
+
+
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+# Definisco la variabile dipendente ed i parametri in modo casuale
+set.seed(12345)
+alpha = round(runif(1, 0.5, 1), 2) #Parametro alfa
+beta = round(runif(1, 0, 1), 2) #Parametro beta
+c = rnorm(n, mean = 100, sd = 50) #Definisco il rumore
+y <- alpha*(x**2) + beta*x + c #Genero la variabile dipendente
+
+#Creo un dataframe con i dati simulati
+simulazione <- data.frame(x = x, y = y)
+```
+
+---
+
+<h1>Gafico dati <span>simulati</span></h1>
+<hr>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+# Definisco la variabile dipendente ed i parametri in modo casuale
+plot(x, y, main = "Grafico dati simulati",
+     xlab = "Variabile Indipendente",
+     ylab = "Variabile Dipendente",
+     xlim = c(min(x), max(x)),
+     ylim = c(0, max(y)))
+```
+
+---
+
+<h1>Creazione <span>modelli</span></h1>
+<hr>
+
+<div style="clear: none;" >
+<div style="float: left; width: 48%;">
+
+Se i dati raffigurati fossero reali ci si potrebbe aspettare una correlazione quadratica o cubica, ma si possono anche valutare altre possibilità.<br><br>
+Nessuna correlazione:<br>
+$Y=1 + c$<br><br>
+Correlazione lineare:<br>
+$Y=\alpha X + c$<br><br>
+Correlazione quadratica:<br>
+$Y=\alpha X^2 + \beta X + c$<br><br>
+Correlazione cubica:<br>
+$Y=\alpha X^3 + \beta X^2 + \gamma X + c$<br><br>
+Correlazione logaritmica:<br>
+$Y=ln(X) + c$<br>
+
+</div>
+<div style="float: right; width: 48%;">
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Definisco i nomi dei modelli 
+#ed i modelli in un vettore
+vettore_modelli <- 
+  c('no_corr'="y~1", 
+    'corr_lin'="y~x", 
+    'corr_quad'="y~I(x^2)+x",
+    'corr_cubica'="y~I(x^3)+I(x^2)+x",
+    'corr_log'="y~log(abs(x))")
+```
+
+
+</div>
+</div>
+
+---
+
+<h1>Creazione <span>modelli</span></h1>
+<hr>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Creo la lista per allocare le informazioni
+modelli <- vector("list", length = length(vettore_modelli))
+
+#Lancio un ciclo for per caricare il nome del modello e la sua 
+#formula nella lista
+
+for (i in seq_along(vettore_modelli)){
+  modelli[i]<-vettore_modelli[i]
+  names(modelli) <- names(vettore_modelli)
+}
+
+#I nomi degli elementi della lista possono essere visualizzati con la
+#funzione names()
+names(modelli)
+```
+
+---
+
+<h1>Lancio il <span>ciclo for</span></h1>
+<hr>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Per ogni modello faccio una predizione su i dati della mia simulazione
+
+for (i in seq_along(modelli)){
+  #Lancio una simulazione per modello
+  modelli[[i]]<- lm(vettore_modelli[i], data = simulazione)
+  #Carico i dati ottenuti in un vettore v
+  v <- predict(modelli[[i]], newdata = simulazione[, c("x", "y")])
+  #Incollo il vettore v nel dataframe
+  simulazione <- cbind(simulazione,v)
+  #Chiamo la nuova colonna come il nome del modello
+  colnames(simulazione)[2+i] <- names(modelli[i])
+  #Rimuovo il vettore v
+  rm(v)
+}
+```
+
+---
+
+<h1>Risultato del <span>ciclo for</span></h1>
+<hr>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+head(simulazione)
+```
+In questo modo ho ottenuto un DF costituito dalle variabili dipendente ed indipendente e dai risultati di tutte le simulazioni condotte.<br>
+Il problema è che se si simulano dati con un modello costruito sugli stessi dati si rischia il fenomeno dell'**overfitting**.<br>
+
+---
+
+<h1>Cross <span>validation</span></h1>
+<hr>
+La Cross_validation può essere una soluzione!<br>
+La Cross_validation è una tecnica statistica utilizzabile in presenza di una buona numerosità del campione osservato.<br>
+In particolare, la cosiddetta *k-fold cross_validation* consiste nella suddivisione dell'insieme di dati totale in k parti di uguale numerosità e, a ogni passo, la kª parte dell'insieme di dati viene a essere quella di convalida, mentre la restante parte costituisce sempre l'insieme di addestramento.
+
+```{r eval=T, echo=T, message=TRUE, warning=F}
+#Creo k gruppi in maniera randomica 
+k <- 10
+#Creo un nuovo database dove inserisco i gruppi
+sim_CV <- add_column(simulazione,
+           gruppo = sample(rep(1:k,
+                           nrow(simulazione)/k),
+                          replace = F),
+           .after = 2 )
+
+```
+
+---
+
+<h1>Cross <span>validation</span></h1>
+<hr>
+```{r eval=T, echo=T, message=TRUE, warning=F}
+#Elimino i dati presenti nel vecchio database
+sim_CV[names(modelli)] <- NA
+head(sim_CV)
+
+#Codice base per selezionare i gruppi
+head(sim_CV[sim_CV[, "gruppo"]==3 ,], 3)
+```
+
+---
+
+<h1>Cross <span>validation</span></h1>
+<hr>
+
+Per condurre una cross-validation è necessario dividere il campione in gruppi uguali e poi selezionare ogni gruppo (test-data) e fare una previsione della variabile dipendente in base ad un modello costruito sulla restante parte dei dati (train-data).<br>
+```{r eval=T, echo=T, message=TRUE, warning=F}
+#Doppio ciclo for per cross-validation
+
+for (i in seq_along(modelli)){
+  
+  for (j in (1:k)){
+    #Creo campione test
+    test <- sim_CV[sim_CV[, "gruppo"]==j, ]
+    #Creo campione per sviluppare il modello
+    train <- sim_CV[sim_CV[, "gruppo"]!=j, ]
+    #Lancio il modello e lo salvo 
+    modelli[[i]]<- lm(vettore_modelli[i], data = train[, c("x", "y")])
+    #Faccio la previsione in base al modello creato
+    #e la carico nel dataframe
+    sim_CV[sim_CV[, "gruppo"]==j, 3+i] <- predict(modelli[[i]], 
+                                                  newdata = test[, c("x", "y")])
+  }
+  #Nomino le colonne
+  colnames(sim_CV)[3+i] <- names(modelli[i])
+}
+```
+
+---
+
+<h1>Qualità dei <span>modelli</span></h1>
+<hr>
+
+Ora valuto la qualità dei modelli attraverso il calcolo del Mean Standard Error:<br>
+
+$MSE = \frac{1}{n}\sum_{i=1}^{n}(Obs_{i}-Pred_{i})^2$<br>
+
+Più basso è il MSE migliore è la qualità del modello che R ha costruito in base all'ipotetica correlazione che gli abbiam proposto.<br>
+
+
+```{r eval=T, echo=T, message=TRUE, warning=F}
+#Creo un vettore fatto di valori nulli
+MSE_CV <- c(rep(NA, length(modelli)))
+#Nomino i valori come i modelli
+names(MSE_CV) <- names(modelli) 
+#Lancio ciclo for per calcolare MSE
+for (i in seq_along(modelli)){
+  nominatore <- (sim_CV [,"y"] - sim_CV[,names(modelli[i])])^2
+  MSE_CV[i] <- nominatore/nrow(sim_CV)
+} 
+#Risultato
+MSE_CV
+```
+<br>
+Con questo risultato è possibile dire che il modello migliore e la correlazione quadratica, ma ciò non stupisce perchè la variabile dipendente è stata costruita su con questo tipo di relazione.
+
+---
+
+<h1>Modificare il <span>Dataframe</span></h1>
+<hr>
+Ho creato così un dataframe che raccoglie i dati simulati e quelli predetti dai vari modelli dopo cross-validation.<br>
+Un dataframe di questo tipo è facile da leggere ma non si può analizzare in forma grafica con un computer.<br>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+dim(sim_CV)
+
+
+head(sim_CV, 2)
+
+
+tail(sim_CV, 2)
+```
+Il modo migliore per fare un grafico dei modelli è trasformarli in variabili fattoriali poste all'interno di una specifica colonna del dataframe.<br>
+
+---
+
+<h1>Creazione di un dataframe <span>"Tidy"</span></h1>
+<hr>
+Definiamo dataframe "Tidy" un qualunque dataframe dove ogni variabile è rappresentata su una specifica colonna ed ogni osservazione è riportata su di una specifica riga.<br>
+In questo caso è utile sfruttare il pacchetto tydir.<br>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#library(tidyverse) #in particolare tydir::gather
+new_sim <- sim_CV %>% 
+  gather(modello, predizione, -c(x, y, gruppo))
+
+new_sim$modello <- factor(new_sim$modello,
+                          levels = c("no_corr",
+                                     "corr_lin",
+                                     "corr_quad",
+                                     "corr_cubica",
+                                     "corr_log"),
+                          ordered = T)
+dim(new_sim)
+
+sample_n(new_sim, 5)
+```
+
+---
+
+<h1>Risultato in forma <span>grafica</span></h1>
+<hr>
+
+```{r eval=T, echo=T, message=TRUE, warning=F}
+ggplot(new_sim , aes(x, y, color = modello))+
+  xlim(c(min(x), max(x)))+
+  ylim(c(min(y), max(y)))+
+  geom_point(color = "black")+
+  geom_line(aes(x = x, y = predizione), size = 1.2, alpha = 0.5)+
+  scale_colour_hue()+
+  labs(title = "Simulazione con ciclo for", 
+       x = "Variabile indipendente", 
+       y = "Variabile dipendente")+
+  theme(plot.title = element_text(face = "bold"))
+```

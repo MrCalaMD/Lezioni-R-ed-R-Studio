@@ -1,0 +1,227 @@
+---
+title: "Stringhe"
+author: "Francesco Calabrese"
+date: "21/3/2022"
+output: slidy_presentation
+css: style.css
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  fig.width = 12,
+  fig.height = 7, size = "tiny", collapse=T, comment="#"
+)
+rm(list=ls())
+```
+
+---
+
+<h1>Gestione delle <span>Stringhe</span></h1>
+<hr>
+R garantisce la più completa gestione delle stringhe, sostanzialmente qualsiasi modifica che si vuole apportare ad una stringa si può fare con R. <br>
+In particolare nel pacchetto tidyverse è contenuto anche il pacchetto ***string***.<br>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+library(tidyverse)
+```
+
+--- 
+
+<h3><span>str_detect</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+library(tidyverse)
+nomi <- c('Marco', 'Anna', 'Giulio', 
+          'Francesco', 'Maria', 'Concetta', 
+          'Anna Maria', 'Mirko', 'Marco')
+str_detect(nomi, 'nn')
+nomi[str_detect(nomi, 'nn')]
+```
+<h3><span>str_ends e str_start</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+str_ends(nomi, 'o')
+str_starts(nomi, 'M')
+nomi[str_ends(nomi, 'o')]
+nomi[str_starts(nomi, 'M')]
+```
+<h3><span>str_to_lower str_to_upper e str_to_title</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+str_to_lower(nomi)
+str_to_upper(nomi)
+str_to_title(nomi)
+```
+
+---
+
+<h3><span>str_count e str_c</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+vettore_stringa <- c("Questo", "è", "un", "vettore", "composto", "da", "stringhe")
+
+str_count(vettore_stringa)
+str_c(vettore_stringa, collapse = ' ')
+```
+
+<h3><span>gsub e str_replace</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Rimuovo tutte le vocali
+
+#Metodo base
+gsub('[aeiouAEIOU]', '*', vettore_stringa)
+
+#Metodo pacchetto string
+str_replace_all(vettore_stringa, '[aeiouAEIOU]', '*')
+```
+
+---
+
+<h3><span>str_subset</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+str_subset(nomi, 'ar', negate = F)
+```
+<h3>Operazioni più <span>complesse</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+str_to_lower(str_extract(nomi, '^.'))
+
+#Se volessi creare delle mail potrei usare la funzione paste0()
+
+paste0(str_to_lower(str_extract(nomi, '^.')), '@uniqualcosa.it')
+
+#Ma cosi i doppi nomi vengono persi, la soluzione é un po' complessa
+
+paste0(#Incollo l'ultima parte della mail
+  str_to_lower(#Le rendo minuscole
+    sapply(#Faccio collassare tutte le prime lettere
+      sapply(#Estraggo la prima lettera
+        sapply(#Divido tutti gli eventuali doppi nomi 
+          nomi, str_split, ' ', simplify = T, USE.NAMES = F),
+  str_extract, '^.'),
+  str_c, collapse = '')),
+  '@uniqualcosa.it')
+
+```
+
+---
+
+<h1>Le Regular <span>Expressions</span></h1>
+<hr>
+Alcuni caratteri in R sono speciali e non possono perciò essere riportati come tali nelle quando una stringa viene restituita dalla console.<br>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+stringa <- "Ciao\nSono andato a capo, \" \\"
+print(stringa)
+
+#Il comando writeLine mi permette di vedere la stringa come una regular 
+#expression e cioè come la vede il computer
+writeLines(stringa)
+writeLines("\\\\")
+stringa <- c("ab", "a.b", "aabb")
+str_subset(stringa, '\\.')
+```
+
+---
+
+<h3>Simbolo <span>backslash</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+stringa <- c("ab", "a.b", "aabb", "a\b", "a\\b", "bbaba")
+#Il punto significa: qualunque carattere 
+str_subset(stringa, '.a.')
+#Se voglio identificare un backslash devo usare per forza il carattere speciale
+str_subset(stringa, 'a\b')
+#Per identificare 2 backslash ne devo usare 4
+str_subset(stringa, '\\\\')
+```
+<h3>Simboli <span>^ e $</span></h3>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+stringa <- c("banana", "mela", "mele", "torta di mele", "melevisione")
+#Con ^ si indica: INIZIA, con $ si indica : FINISCE
+str_subset(stringa, "mel")
+str_subset(stringa, "^mel")
+str_subset(stringa, "mele$")
+str_subset(stringa, "^mele$")
+```
+
+---
+
+<h3>Simboli <span>backslash(d o s) [..] e [^]</span></h3>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+stringa <- c("Slipknot", "A Day to Remember", "Green Day", "Sum41", "Blink182")
+#\d seleziona tutto ciò che ha numeri dentro
+str_subset(stringa, "\\d")
+#\s seleziona tutto quello che ha uno spazio bianco
+str_subset(stringa, "\\s")
+#[...] seleziona tutto ciò che è in parentesi
+str_subset(stringa, "[pkn]")
+#[^...] seleziona tutto tranne quello che è fra parentesi
+str_subset(stringa, "[^Slipknot]")
+str_subset(stringa, "A[ ]")
+```
+
+---
+
+<h3>Operatori <span>logici</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#E' possibile usare gli operatori logici nella analisi delle stringhe
+comuni <- c("Ciriè", "Cirié", "Cirie'", "Egne'", "Egnè", "Moncalieri")
+#Questa situazione è molto problematica perchè per il computer
+#è come avere 4 comuni distinti!
+str_subset(comuni, "Ciri(e\\'|é|è)")
+#Ma si può fare di meglio
+str_subset(comuni, ".(e\\'|é|è|e)$")
+#Ed ora posso omologare tutto! Con la funzione gsub()
+gsub("(e\\'|é|è|e)$", "è" , str_subset(comuni, ".(e\\'|é|è|e)$"))
+```
+
+---
+
+<h3>Le squenze che si <span>ripetono</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+# ? trova corrispondanza con l'elemento precedente 0 o 1 volta
+
+stringa <- c("ran", "rain", "train", "rn", "raiin")
+
+str_extract(stringa, "rai?n")
+str_subset(stringa, "rai?n")
+
+# + trova corrispondanza con l'elemento precedente 1 o più volta
+str_extract(stringa, "rai+n")
+str_subset(stringa, "rai+n")
+# * trova corrispondanza con l'elemento precedente 0, 1 o più volta
+str_extract(stringa, "rai*n")
+str_subset(stringa, "rai*n")
+str_subset(stringa, "r(ai)*n")
+
+```
+
+---
+
+<h3>Le squenze che si <span>ripetono</span></h3>
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+
+# {numero minimo, numeromassimo} trova corrispondanza solo con i valori dati
+stringa <- c("ran", "rain", "train", "rn", "raiin", "raiiin")
+
+str_subset(stringa, "rai{1,2}n")
+
+#Con il backslash posso selezzionare sequenze che si ripetono
+#é possibile mettere fra parentesi una sequenza e vedere quante volte si ripete
+stringa <- c("banana", "cocco", "papaia", "pappa", "tartare","osso", "peppa")
+
+# Riconosci qualunque lettera che si ripete dopo
+str_extract(stringa, "(.)\\1")
+#Riconosci 2 lettere che si ripetono dopo una lettera qualunque
+str_extract(stringa, "(..)(.)\\1")
+#Riconosci 3 lettere che si ripetono 
+str_extract(stringa, "(...)\\1")
+#Riconosci 1 lettera che si ripete dopo una lettera qualunque
+str_extract(stringa, "(.)(.)\\1")
+#Riconosci 2 lettere che si ripetono e un carattere qualunque prima
+str_extract(stringa, "(.)(.)\\2")
+#Riconosci tutte le sequenze dove prima e seconda lettera 
+#si ripetono e la lettera successiva
+str_extract(stringa, "(..)\\1")
+
+```
