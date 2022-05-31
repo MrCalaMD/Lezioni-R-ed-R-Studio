@@ -44,4 +44,5 @@ Partendo dalle finzioni più semplici si apprifondisce il tema delle ***Regular 
 
 ## Lezione 3: Gestione DataBase e variabili categoriche
 ## Lezione 4: Ciclo For con applicazione per Cross-Validation
-
+### Slide
+[Slide Lezione4](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione3_CicloFor.html)
