@@ -1,0 +1,415 @@
+---
+title: "Gestione Database"
+author: "Francesco Calabrese"
+date: "01/06/2022"
+output: 
+  slidy_presentation: 
+    fig_height: 2
+css: style.css
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  fig.width = 12,
+  fig.height = 7, size = "tiny", collapse=T, comment="#"
+)
+rm(list=ls())
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+R e l'analisi dei <span>dati</span>
+
+</h1>
+
+<hr>
+
+Come anche altri programmi R presenta numerosi strumenti per l'analisi
+dei dati.<br> Analizzare dati significa:<br>
+
+1.  Ottenere una o più informazioni da un osservazione
+2.  Ordinare queste informazioni possibilmente in ***tidy data***
+3.  Pulire le informazioni così ottenute
+4.  Valutare la qualità dell'informazione
+5.  Analizzare le informazioni attraverso la ***statistica descrittiva
+    ed inferenziale***
+6.  Analizzare le informazioni graficamente
+
+------------------------------------------------------------------------
+
+<h1>
+
+Il problema della raccolta <span>dati</span>
+
+</h1>
+
+<hr>
+
+I primi 2 punti sono di solito compito di chi raccoglie i dati mentre
+gli altri 4 punti sono prerogative di chi il dato lo analizza e cerca di
+trarne informazioni utlili, fruibili ed immediate. <br><br> Spesso la
+raccolta dei dati è gravata da diverse problematiche in quanto le
+osservazioni possono essere basate su interviste o questionari che
+debbono essere compilati manualmente attraverso mezzi analogici (carta e
+penna).<br><br> Se possibile è <mark> sempre meglio</mark> ottenere
+informazioni direttamente da sistemi informatici i quali di solito sono
+costruiti per presentare osservazioni ed informazioni in modo grezzo, ma
+corretto.
+
+------------------------------------------------------------------------
+
+<h1>
+
+Esempio <span>pratico</span>
+
+</h1>
+
+Immaginiamo di aver strutturato un questionario sulla telemedicina e
+sulle case di comunità ai medici di base di un'azienda sanitaria. <br>
+Il questionario è stato somministrato manualmente ed il medici di base
+lo hanno compilato con carta e penna; dopodichè le risposte sono state
+caricate su un foglio di lavoro Excel in formato
+<mark>xlsx</mark>.<br><br> Per fare prima, ad ogni domanda sono state
+associate delle <mark>risposte numerate</mark> e solo il numero è stato
+riportato nel file Excel.<br><br> Innanzi tutto carichiamo i
+<mark>package</mark> necessari per lavorare su questo Dataframe.
+
+```{r eval=T, echo=T, message=F, warning=TRUE}
+#Carico pacchetti necessari
+library(readxl)
+library(tidyverse)
+library(kableExtra)
+```
+
+------------------------------------------------------------------------
+
+Dopo aver caricato in pacchetti <mark>readxl</mark> e
+<mark>tidyverse</mark>, carico nell'ambiente di lavoro il dataframe ed
+inizio a gestire le risposte non come numeri, ma come variabili di tipo
+<mark>character</mark>.
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+dati<-readxl::read_xlsx("data.xlsx", col_names = T)
+str(dati[1:6])
+#Tolgo colonna che contava le osservazioni
+dati <- dati[2:ncol(dati)]
+#Trasformo tutti i numeri in variabili stringa
+dati <- lapply(dati, as.character)
+dati <- as.data.frame(dati)
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+Importare in R un <span>questionario</span>
+
+</h1>
+
+Il prossimo passo è quello di "tradurre" un questionario in un
+linguaggio che R sia in grado di interpretare. Il questionario prevede
+<mark>esclusivamente</mark> domande che ricavano informazioni
+categoriche (età, genere, propensione alla telemedicina, ect...)<br><br>
+Per portare un questionario in R ho deciso di creare dei vettori
+categorici, ordinali o meno, assegnando un titolo ad ogni variabile che
+<mark>deve corrispondere</mark> al numero del questionario.
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+Sede <- as.factor(c("1" = "Urbana", "2" = "Rurale"))
+
+Eta <- factor(c("1" = "25-30", "2" = "30-39", "3" = "40-49",
+                   "4" = "50-59", "5"= ">60"), 
+              levels = c("25-30", "30-39", "40-49", "50-59", ">60"))
+
+N_assistiti<- factor(c("1" = "<500", "2" = "500-1000", 
+                          "3" = "1000-1500", "4" = ">1500"),
+                     levels = c("<500", "500-1000", "1000-1500",
+                                ">1500"))
+
+Genere <- factor(c("1" = "M", "2" = "F"))
+
+N_assistiti
+```
+
+```{r eval=T, echo=T, message=F, warning=F, include=FALSE}
+
+Specializzazione <- factor(c("1" = "Si", "2" = "No"))
+
+CorsoMMG <- factor(c("1" = "Si", "2" = "No"))
+
+Televisite_pz <- factor(c("1" = "Mai", "2" = "Raramente", "3" = "Se richiesta",
+                             "4" = "Abitualmente"),
+                           levels = c("Mai", "Raramente", "Se richiesta", "Abitualmente"))
+
+u30gg_televisite <- factor(c("1" = "0", "2" = "<10", "3" = "10-100",
+                                "4" = ">100"),
+                           levels = c("0", "<10", "10-100", ">100"))
+
+Frequenza_televisite <- factor(c("1" = "Mai non disposto", "2" = "Mai disposto",
+                                    "3" = "Ogni volta"))
+
+Specialisti_televisite <- factor(c("1" = "Cardiologo", "2" = "Dermatologo",
+                                      "3" = "Neurologo","4" = "Pneumologo",
+                                      "5" = "Radiologo", "6" = "Pediatra",
+                                      "7" = "altro"))
+
+Specialisti_televisite2 <- factor(c("1" = "Cardiologo", "2" = "Dermatologo",
+                                       "3" = "Neurologo","4" = "Pneumologo",
+                                       "5" = "Radiologo", "6" = "Pediatra",
+                                       "7" = "altro"))
+
+Prof_teleconsulto <- factor(c("1" = "MMG-Specialista", "2" = "Infermiere distretto-MMG"))
+
+Pz_televisita <- factor(c("1" = "Acuto", "2" = "Cronico",
+                             "3" = "Grande anziano",
+                             "4" = "Cronico riacutizzato"))
+
+Applicazione_televisita <- factor(c("1" = "Telerefertazione",
+                                       "2" = "Telemonitoraggio dopo primo accesso",
+                                       "3" = "Teleconsulto",
+                                       "4" = "Videochiamata"))
+
+Conduzione_studio <- factor(c("1" = "Medicina in rete", "2" = "Medicina in gruppo",
+                                 "3" = "Medicina di associazione",
+                                 "4" = "Studio singolo"))
+
+Ingresso_CDC <- factor(c("1" = "Si", "2" = "No", "3" = "Dipende da regole"))
+
+CDC_telemedicina <- factor(c("1" = "Si, se mi verrà fornita la tecnologia",
+                                "2" = "No, la applico già"))
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+Creare una <span>lista</span> dove accogliere i <span>vettori</span>
+
+</h1>
+
+Per creare una lista uso la funzione <mark>vector()</mark> che permette
+di creare liste vuote.<br> Ho deciso di creare una lista di lunghezza
+pari al numero di variabili del dataframe. Per farlo ho specificato che
+la lunghezza della lista doveva essere pari al numero di colonne del
+dataframe con la funzione <mark>ncol()</mark>.
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Creo un lista vuota
+lista <- vector("list", length = ncol(dati))
+#Nomino gli elementi della lista come le colonne del DF
+for (i in 1:ncol(dati)){
+  names(lista)[i]<- colnames(dati[i])
+}
+```
+
+Ho poi nominato ogni elemento della lista come le colonne del dataframe
+usando un <mark>ciclo for</mark>.<br> Ma avrei potuto semplicemente
+scrive: `names(lista)=colnames(dati)`
+
+------------------------------------------------------------------------
+
+<h1>
+
+Inserire i <span>vettori</span> dentro la <span>lista</span>
+
+</h1>
+
+Per inserire un elemento in una lista è necessario usare le funzioni
+base di ed in particolare la doppia parentesi quadra.<br> L'ordine in
+cui ho inserito i vettori è lo stesso con cui sono disposte le colonne
+del dataframe.
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#Carico i vettori fattoriali nella lista
+lista[[1]]<- Sede
+lista[[2]]<- Eta
+lista[[3]]<- N_assistiti
+lista[[4]]<- Genere
+lista[[5]]<- Specializzazione
+lista[[6]]<- CorsoMMG
+lista[[7]]<- Televisite_pz
+lista[[8]]<- u30gg_televisite
+lista[[9]]<- Frequenza_televisite
+lista[[10]]<- Specialisti_televisite
+lista[[11]]<- Specialisti_televisite2
+lista[[12]]<- Prof_teleconsulto
+lista[[13]]<- Pz_televisita
+lista[[14]]<- Applicazione_televisita
+lista[[15]]<- Conduzione_studio
+lista[[16]]<- Ingresso_CDC
+lista[[17]]<- CDC_telemedicina
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+Base <span>teorica</span>
+
+</h1>
+
+Se creo un vettore fattoriale attribuendo un titolo o o nome ad ogni
+variabile e lo richiamo, R mi restituisce non solo gli elementi del
+vettore, ma anche il titolo di ogni variabile e il modo in cui R vede
+ordinate le variabili (in ordine alfabetico se non si specifica nulla).
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+Eta
+
+Frequenza_televisite
+```
+
+Per richiamare gli elementi di un vettore fattoriale è possibile
+avvalersi della funzione base di R <mark>parentesi \[\]</mark>. <br>
+Grazie a questa funzione se ad ogni variabile è dato un nome o titolo è
+possibile far restituire ad R un vettore con le variabili
+corrispondenti.
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+Eta[c("1", "2", "3", "4", "5", "6", "1", "2", "3")]
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+Convertire le risposte <span>numeriche</span>
+
+</h1>
+
+L'ultimo passaggio consiste nell'usare la sintassi base di R ed un ciclo
+for per convertire tutte le variabili espresse in numero nelle
+corrispondenti variabili fattoriali.<br> Per ogni ciclo preleverò un
+vettore dal dataframe con le variabili espresse in numero ed userò quel
+vettore per ottenere le variabili fattoriali prelevate dai vettori
+ordinati nella lista che li contiene.<br> Dopo aver ottenuto le
+variabili le inserirò nel dataframe sostituendole alla colonna di
+partenza.<br> Per trasferire il vettore nel dataframe userò una
+<mark>variabile</mark> che sarà eliminata ad ogni ciclo for.
+
+```{r eval=T, echo=T, message=F, warning=TRUE}
+for (i in 1:ncol(dati)){
+  #genero un vettore fatto dalle variabili fattoriali
+  v <- unlist(dati[names(lista)[i]])
+  #elimino i nomi (non è fondamentale)
+  names(v)<- NULL
+  #sovrascrivo con questi dati il DF di partenza
+  dati[i]<-lista[[i]][v]
+  #elimino il vettore per liberare spazio
+  rm(v)
+}
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+Risultato
+
+</h1>
+
+Dopo aver lanciato il ciclo for il database si presenta molto più
+leggibile, i dati sono già in formato ***tidy*** e perciò è possibile
+iniziare ad analizzare i risultati.<br>
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+head(dati[1:7], 10)
+```
+
+------------------------------------------------------------------------
+
+<h1>
+
+Tabella <span>riassuntiva</span>
+
+</h1>
+
+::: {style="display:inline;"}
+::: {style="width:35%; float:left"}
+```{r eval=F, echo=T, message=F}
+dati %>%
+  select(Eta, Televisite_pz) %>% 
+  group_by(Eta, Televisite_pz) %>% 
+  mutate(Numero = n())%>% 
+  ungroup() %>% unique() %>% 
+  mutate(Percentuale = paste0(
+    round(
+      Numero/sum(Numero)*100, 1), "%")) %>% 
+  kable() %>% 
+  kable_minimal(full_width = F)
+```
+:::
+
+::: {style="float: right; width: 60%; font-size:15px; height:40%"}
+```{r eval=T, echo=F, message=F}
+dati %>%
+  select(Eta, Televisite_pz) %>% 
+  group_by(Eta, Televisite_pz) %>% 
+  mutate(Numero = n())%>% 
+  ungroup() %>% unique() %>% 
+  mutate(Percentuale = paste0(
+    round(
+      Numero/sum(Numero)*100, 1), "%")) %>% 
+  kable() %>% 
+  kable_minimal(full_width = T)
+```
+
+:::
+:::
+
+------------------------------------------------------------------------
+
+<h1>
+
+Analisi grafica <span>semplice</span>
+
+</h1>
+
+::: {style="display:inline;"}
+::: {style="width:35%; float:left;"}
+```{r eval=F, echo=T, message=TRUE, warning=TRUE}
+#genero grafico
+ggplot(dati, aes(Pz_televisita))+
+  geom_bar(stat = "count")
+```
+:::
+
+::: {style="width:60%; float:right;"}
+```{r eval=T, echo=F, message=TRUE, warning=TRUE}
+#genero grafico
+ggplot(dati, aes(Pz_televisita))+
+  geom_bar(stat = "count", width = 0.5)
+```
+:::
+:::
+
+------------------------------------------------------------------------
+
+<h1>
+
+Analisi grafica <span>avanzata</span>
+
+</h1>
+
+
+```{r eval=T, echo=T, message=TRUE, warning=TRUE}
+#genero grafico
+ggplot(dati, aes(x = N_assistiti,fill=Televisite_pz))+
+  geom_bar(stat="count", color="black", width = 0.5)+
+  facet_wrap(~dati$Eta, ncol = 5)+
+  theme_bw()+
+  ggtitle("Televisita MMG")+
+  xlab("Numero di assistiti")+
+  ylim(c(0, 30))+
+  ylab("Percentuale")+
+  theme(legend.position = "bottom")
+```
