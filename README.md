@@ -48,7 +48,8 @@ Partendo dalle funzioni più semplici si approfondisce il tema delle ***Regular 
 ### Registrazione lezione:<br>
 ### Argomenti
 In questa lezione si affronterà il tema dell'uso delle funzioni base di R per ricavare da un database numerico grezzo, ottenuto dalla compilazione di un questionario, un database dal quale poter trarre informazioni utili attraverso la rappresentazione grafica di variabili fattoriali.<br>
-Lo script utilizzato 
+Lo [script utilizzato](github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/script_Lezione_3.R) funziona esclusivamente se il Dataframe di partenza è salvato nella stessa *directory* (cartella) nella quale si sta lavorando.<br>
+Per verificare qual è la ***working directory*** si può usare il comando `getwd()`.
 
 ## Lezione 4: Ciclo For con applicazione per Cross-Validation
 ### Slide
