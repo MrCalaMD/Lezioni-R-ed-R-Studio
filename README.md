@@ -9,7 +9,6 @@ https://cran.r-project.org/bin/windows/base/<br>
 Link R-studio:<br>
 https://www.rstudio.com/products/rstudio/download/<br>
 
-
 ## Lezione 1: Introduzione ad R-studio e uso funzionale di R
 ### Slide
 [Slide Lezione1](https://htmlpreview.github.io/?https://github.com/DoctorFrancescoCalabrese/Lezioni-R-ed-R-Studio/blob/main/Slide/Lezione1_Intro.html)
@@ -29,6 +28,12 @@ Vengono inolte introdotti alcuni elementi fondamentali di programmazione fra cui
 - While loop
 - If/Else
 
+## Lezione 2: Introduzione Database - Analisi Descrittiva
+### Slide
+
+### Argomenti
+In questa lezone si approfondisce il concetto di Vettori e Database e si va a defininire le metodiche più base per importare e modificare i Database.
+Vengono anche introdotte le principali funzioni per condurre un analisi descrittiva utilizzando R.
 
 ## Lezione 2: Manipolazione delle stringhe e pacchetto string
 ### Slide
